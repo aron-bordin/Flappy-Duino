@@ -80,20 +80,6 @@ void drawHero(){
     led->setLedOn((int)heroY - 1, 2);
 }
 
-void drawFloor(){
-    /**
-      the floor is basic, like:
-      **** **** **** ****
-     */
-    
-    int x = (int)floorOffset;
-
-    for(int i = 0; i < 16; i++){
-        if((i + x) % 4 != 0)
-            led->setLedOn(15, i);
-    }
-}
-
 void drawTower(){
     /**
       The tower is a vertical line, with a gap of 5 leds
@@ -132,7 +118,6 @@ void gameUpdate(){
     if(floorOffset > 4)
         floorOffset = 0;
 
-    // drawFloor(); //show the floor in the scene
     drawTower(); // show the tower in the screen
     drawHero(); //show the hero in the scene
 
