@@ -15,11 +15,11 @@
  */
 
 
-#include "LedMatrixObject.h"
-#include "TimerObject.h"
+#include "LedMatrixObject.h" //class to help us with the led matrix
+#include "TimerObject.h" //class to manage the game FPS
 
 
-LedMatrixObject *led = new LedMatrixObject(2, 3, 4, 5, 6, 7, 8, 9);
+LedMatrixObject *led = new LedMatrixObject(2, 3, 4, 5, 6, 7, 8, 9); 
 
 TimerObject *fps = new TimerObject(1/30); //so we can have 30 FPS 
 
@@ -30,14 +30,14 @@ float towerX = 15; //pos to the enemy tower
 float floorOffset = 1;
 float hSpeed = 0.05; //scene move 0.1 led/fps
 
-int gapY = 3;
-
+int gapY = 3; //position of the gap in the tower
+ 
 int buttonPin = 11;
 
-unsigned long deadTime = millis();
+unsigned long deadTime = millis(); //we only restart the game 1 second after the hero die
 
 
-unsigned char  Home[16][16] = {
+unsigned char  Home[16][16] = { //home screen scene
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     {1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1},
     {1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
@@ -56,13 +56,16 @@ unsigned char  Home[16][16] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 };
 
-bool isHome = true;
+bool isHome = true; //if the user is in the screen
+
+
 void setup(){
     Serial.begin(9600);
     pinMode(buttonPin, INPUT);
     fps->setOnTimer(&gameUpdate);
     fps->Start();
 }
+
 
 void drawHero(){
     /*
@@ -84,15 +87,15 @@ void drawTower(){
     /**
       The tower is a vertical line, with a gap of 5 leds
      */
-    towerX -= hSpeed;
+    towerX -= hSpeed; //move the tower to the left
     int x = (int)towerX;
-    if(x < 0){
+    if(x < 0){ // if moved to 0, returns to the right
         x = 15;
         towerX = 15;
         gapY = random(0, 8);
     }
 
-    for(int i = 0; i < 16; i++){
+    for(int i = 0; i < 16; i++){ //draw the tower
         if(i <= gapY || i >= gapY + 7){
             led->setLedOn(i, x);    
             led->setLedOn(i, x + 1);
@@ -103,7 +106,7 @@ void drawTower(){
         checkCollisions();
 }
 
-void checkCollisions(){
+void checkCollisions(){ //check collision
     if(heroY < gapY | heroY > gapY + 7)
         heroDie();
 }
